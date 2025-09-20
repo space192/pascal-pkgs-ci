@@ -17,27 +17,30 @@ runs:
   using: "composite"
 
   steps:
-    - name: Cleanup runner image
-      shell: bash
-      run: |
-        # Remove unnecessary directories
-        sudo rm -fr /opt/*
-        sudo rm -fr /usr/lib/jvm
-        sudo rm -fr /usr/lib/google-cloud-sdk
-        sudo rm -fr /usr/local
-        sudo rm -fr /usr/share/swift
-        sudo rm -fr /usr/share/dotnet
-        sudo rm -fr /usr/share/miniconda
+  - name: Cleanup runner image
+    shell: bash
+    run: |
+      # Remove unnecessary directories
+      sudo rm -fr /opt/*
+      sudo rm -fr /usr/lib/jvm
+      sudo rm -fr /usr/lib/google-cloud-sdk
+      sudo rm -fr /usr/local
+      sudo rm -fr /usr/share/swift
+      sudo rm -fr /usr/share/dotnet
+      sudo rm -fr /usr/share/miniconda
 
-        # Recreate directories
-        sudo mkdir -p /usr/local/{bin,etc,games,include,lib,man,sbin,share,src}
+      # Recreate directories
+      sudo mkdir -p /usr/local/{bin,etc,games,include,lib,man,sbin,share,src}
 
-    - name: Build wheels
-      shell: bash
-      run: .ci/build-vllm.sh "$PWD" "${{ inputs.repository }}" "${{ inputs.ref }}" "${{ github.repository_owner }}" "${{ inputs.ghcr_token }}"
+  - name: Build wheels
+    shell: bash
+    run: .ci/build-vllm.sh "$PWD" "${{ inputs.repository }}" "${{ inputs.ref }}" "${{ github.repository_owner }}" "${{ inputs.ghcr_token }}"
+    env:
+      MAX_JOBS: 2
+      NVCC_THREADS: 8
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: vllm_pascal
-        path: dist/*.whl
+  - name: Upload artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: vllm_pascal
+      path: dist/*.whl
