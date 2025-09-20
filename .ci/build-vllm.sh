@@ -58,7 +58,7 @@ docker build \
   --build-arg "CUDA_VERSION=12.1.0" \
   --build-arg "USE_SCCACHE=1" \
   --build-arg "SCCACHE_REGION_NAME=eu-west-1" \
-  --build-arg "SCCACHE_ENDPOINT="$AWS_ENDPOINT" \
+  --build-arg "SCCACHE_ENDPOINT=$AWS_ENDPOINT" \
   --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
   --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
   --build-arg "torch_cuda_arch_list=6.0 6.1" \
@@ -88,7 +88,11 @@ if [ -n "$ghcr_token" ]; then
   # Build image
   docker build \
     --build-arg "CUDA_VERSION=12.1.0" \
-    --build-arg "USE_SCCACHE=0" \
+    --build-arg "USE_SCCACHE=1" \
+    --build-arg "SCCACHE_REGION_NAME=eu-west-1" \
+    --build-arg "SCCACHE_ENDPOINT=$AWS_ENDPOINT" \
+    --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
+    --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
     --build-arg "torch_cuda_arch_list=6.0 6.1" \
     --build-arg "max_jobs=16" \
     --build-arg "nvcc_threads=16" \
