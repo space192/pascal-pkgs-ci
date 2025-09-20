@@ -35,9 +35,6 @@ runs:
   - name: Build wheels
     shell: bash
     run: .ci/build-vllm.sh "$PWD" "${{ inputs.repository }}" "${{ inputs.ref }}" "${{ github.repository_owner }}" "${{ inputs.ghcr_token }}"
-    env:
-      MAX_JOBS: 2
-      NVCC_THREADS: 8
 
   - name: Upload artifact
     uses: actions/upload-artifact@v4
