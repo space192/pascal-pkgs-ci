@@ -12,6 +12,8 @@ jobs:
         uses: ./.github/actions/build-vllm
         with:
           ghcr_token: ${{ secrets.GHCR_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           ref: v0.10.0
 
   publish:

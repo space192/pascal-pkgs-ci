@@ -1,20 +1,35 @@
 --- a/docker/Dockerfile
 +++ b/docker/Dockerfile
-@@ -86,6 +87,8 @@ ARG SCCACHE_S3_NO_CREDENTIALS=0
+@@ -201,6 +201,10 @@ ARG VLLM_MAIN_CUDA_VERSION=""
  # if USE_SCCACHE is set, use sccache to speed up compilation
- RUN --mount=type=cache,target=/root/.cache/pip \
+ RUN --mount=type=cache,target=/root/.cache/uv \
      --mount=type=bind,source=.git,target=.git \
 +    --mount=type=secret,id=SETUPTOOLS_SCM_PRETEND_VERSION \
++    --mount=type=secret,id=AWS_ACCESS_KEY_ID \
++    --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \
 +    export SETUPTOOLS_SCM_PRETEND_VERSION=$(cat /run/secrets/SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VLLM); \
      if [ "$USE_SCCACHE" = "1" ]; then \
          echo "Installing sccache..." \
-         && curl -L -o sccache.tar.gz https://github.com/mozilla/sccache/releases/download/v0.8.1/sccache-v0.8.1-x86_64-unknown-linux-musl.tar.gz \
-@@ -106,6 +108,8 @@ ENV CCACHE_DIR=/root/.cache/ccache
+         && curl -L -o sccache.tar.gz ${SCCACHE_DOWNLOAD_URL} \
+@@ -211,6 +215,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
+         && export SCCACHE_BUCKET=${SCCACHE_BUCKET_NAME} \
+         && export SCCACHE_REGION=${SCCACHE_REGION_NAME} \
+         && export SCCACHE_S3_NO_CREDENTIALS=${SCCACHE_S3_NO_CREDENTIALS} \
++        && export AWS_ACCESS_KEY_ID=$(cat /run/secrets/AWS_ACCESS_KEY_ID); \
++        && export AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY); \
+         && export SCCACHE_IDLE_TIMEOUT=0 \
+         && export CMAKE_BUILD_TYPE=Release \
+         && export VLLM_USE_PRECOMPILED="${VLLM_USE_PRECOMPILED}" \
+@@ -227,6 +233,12 @@ ENV CCACHE_DIR=/root/.cache/ccache
  RUN --mount=type=cache,target=/root/.cache/ccache \
-     --mount=type=cache,target=/root/.cache/pip \
+     --mount=type=cache,target=/root/.cache/uv \
      --mount=type=bind,source=.git,target=.git  \
 +    --mount=type=secret,id=SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VLLM \
++    --mount=type=secret,id=AWS_ACCESS_KEY_ID \
++    --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \
 +    export SETUPTOOLS_SCM_PRETEND_VERSION=$(cat /run/secrets/SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VLLM); \
++    export AWS_ACCESS_KEY_ID=$(cat /run/secrets/AWS_ACCESS_KEY_ID); \
++    export AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY); \
      if [ "$USE_SCCACHE" != "1" ]; then \
-         python3 setup.py bdist_wheel --dist-dir=dist --py-limited-api=cp38; \
-     fi
+         # Clean any existing CMake artifacts
+         rm -rf .deps && \

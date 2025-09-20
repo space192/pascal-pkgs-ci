@@ -8,6 +8,11 @@ inputs:
   ref:
     default: main
     type: string
+  AWS_ACCESS_KEY_ID:
+    description: aws acess key_id
+
+  AWS_SECRET_ACCESS_KEY:
+    description: aws acess key_secret
 
   repository:
     default: vllm-project/vllm
@@ -34,7 +39,7 @@ runs:
 
   - name: Build wheels
     shell: bash
-    run: .ci/build-vllm.sh "$PWD" "${{ inputs.repository }}" "${{ inputs.ref }}" "${{ github.repository_owner }}" "${{ inputs.ghcr_token }}"
+    run: .ci/build-vllm.sh "$PWD" "${{ inputs.repository }}" "${{ inputs.ref }}" "${{ github.repository_owner }}" "${{ inputs.ghcr_token }}" "${{ inputs.AWS_ACCESS_KEY_ID }}" "${{ inputs.AWS_SECRET_ACCESS_KEY }}"
 
   - name: Upload artifact
     uses: actions/upload-artifact@v4
