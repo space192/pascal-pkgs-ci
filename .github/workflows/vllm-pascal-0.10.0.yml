@@ -2,7 +2,7 @@ name: "[X] Build vLLM (v0.10.0)"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -30,14 +30,14 @@ jobs:
         with:
           prefix: vllm_pascal-0.10.0
 
-  update-index:
-    needs: publish
-    secrets: inherit
-    uses: ./.github/workflows/zz-update-index.yml
+  # update-index:
+  #   needs: publish
+  #   secrets: inherit
+  #   uses: ./.github/workflows/zz-update-index.yml
 
-    permissions:
-      id-token: write
-      pages: write
+  #   permissions:
+  #     id-token: write
+  #     pages: write
 
 on:
   workflow_dispatch:
