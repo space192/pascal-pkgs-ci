@@ -6,8 +6,9 @@ repository="$2"
 ref="$3"
 ghcr_user="$4"
 ghcr_token="$5"
-AWS_ACCESS_KEY_ID="$6"
-AWS_SECRET_ACCESS_KEY="$7"
+AWS_ENDPOINT="$6"
+AWS_ACCESS_KEY_ID="$7"
+AWS_SECRET_ACCESS_KEY="$8"
 
 # Use root directory
 cd "$root"
@@ -57,6 +58,7 @@ docker build \
   --build-arg "CUDA_VERSION=12.1.0" \
   --build-arg "USE_SCCACHE=1" \
   --build-arg "SCCACHE_REGION_NAME=eu-west-1" \
+  --build-arg "SCCACHE_ENDPOINT="$AWS_ENDPOINT" \
   --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
   --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
   --build-arg "torch_cuda_arch_list=6.0 6.1" \
