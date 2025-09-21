@@ -94,8 +94,8 @@ if [ -n "$ghcr_token" ]; then
     --build-arg "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
     --build-arg "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" \
     --build-arg "torch_cuda_arch_list=6.0 6.1" \
-    --build-arg "max_jobs=4" \
-    --build-arg "nvcc_threads=4" \
+    --build-arg "max_jobs=2" \
+    --build-arg "nvcc_threads=2" \
     --file "$dockerfile" \
     --secret "id=SETUPTOOLS_SCM_PRETEND_VERSION_FOR_VLLM" \
     --tag "$docker_tag" \
