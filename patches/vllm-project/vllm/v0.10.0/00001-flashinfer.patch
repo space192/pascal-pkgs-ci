@@ -56,7 +56,7 @@
 +#     popd
 +#     rm -rf flashinfer
 +# BASH
-+RUN uv pip install flashinfer-python==${FLASHINFER_GIT_REF}
++RUN uv pip install --system flashinfer-python==${FLASHINFER_GIT_REF}
  COPY examples examples
  COPY benchmarks benchmarks
  COPY ./vllm/collect_env.py .
