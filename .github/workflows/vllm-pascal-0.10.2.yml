@@ -1,0 +1,46 @@
+name: "[X] Build vLLM (v0.10.2)"
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build vLLM wheels
+        uses: ./.github/actions/build-vllm
+        with:
+          ghcr_token: ${{ secrets.GHCR_TOKEN }}
+          AWS_ENDPOINT: ${{ secrets.AWS_ENDPOINT }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ref: v0.10.2
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish wheels
+        uses: ./.github/actions/publish-wheels
+        with:
+          prefix: vllm_pascal-0.10.0
+
+  # update-index:
+  #   needs: publish
+  #   secrets: inherit
+  #   uses: ./.github/workflows/zz-update-index.yml
+
+  #   permissions:
+  #     id-token: write
+  #     pages: write
+
+on:
+  workflow_dispatch:
