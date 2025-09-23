@@ -45,6 +45,7 @@ runs:
       shell: bash
       run: |
         pip install twine packaging --upgrade
+        ls pascal-pkgs-ci
         twine upload --repository-url "${{ inputs.pypi_repository_url }}" \
                      --username "${{ inputs.pypi_username }}" \
                      --password "${{ inputs.pypi_password }}" \
