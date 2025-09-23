@@ -23,7 +23,7 @@
      uv pip install --system dist/*.whl --verbose \
 -        --extra-index-url ${PYTORCH_CUDA_INDEX_BASE_URL}/cu$(echo $CUDA_VERSION | cut -d. -f1,2 | tr -d '.')
 +        --extra-index-url ${PYTORCH_CUDA_INDEX_BASE_URL}/cu$(echo $CUDA_VERSION | cut -d. -f1,2 | tr -d '.') && \
-+    export PIP_EXTRA_INDEX_URL="https://sasha0552.github.io/pascal-pkgs-ci/" && \
++    export PIP_EXTRA_INDEX_URL="https://sasha0552.github.io/pascal-pkgs-ci/ https://pypi.fournierfamily.ovh/" && \
 +    python3 -m pip install transient-package && \
 +    transient-package install --source triton --target triton-pascal && \
 +    sed -e "s/.major < 7/.major < 6/g" \
