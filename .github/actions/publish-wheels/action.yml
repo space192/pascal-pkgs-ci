@@ -1,9 +1,19 @@
 name: Publish wheels
+description: Publish wheels to GitHub releases and PyPI
 
 inputs:
   prefix:
     required: true
-    type: string
+    description: "Prefix of the wheel files to publish"
+  pypi_repository_url:
+    required: false
+    description: "URL of the PyPI repository to publish to"
+  pypi_username:
+    required: false
+    description: "Username for the PyPI repository"
+  pypi_password:
+    required: false
+    description: "Password for the PyPI repository"
 
 runs:
   using: "composite"
@@ -22,10 +32,20 @@ runs:
 
         assets: |
           ${{ inputs.prefix }}+*.whl
-          ${{ inputs.prefix }}-*.whl 
- 
+          ${{ inputs.prefix }}-*.whl
+
     - name: Upload wheels
       uses: softprops/action-gh-release@v2
       with:
         files: "**/${{ inputs.prefix }}*.whl"
         tag_name: wheels
+
+    - name: Publish to private PyPI
+      if: ${{ inputs.pypi_repository_url != '' && inputs.pypi_username != '' && inputs.pypi_password != '' }}
+      shell: bash
+      run: |
+        pip install twine packaging --upgrade
+        twine upload --repository-url "${{ inputs.pypi_repository_url }}" \
+                     --username "${{ inputs.pypi_username }}" \
+                     --password "${{ inputs.pypi_password }}" \
+                     "**/${{ inputs.prefix }}*.whl"

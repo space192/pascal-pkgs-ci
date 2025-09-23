@@ -13,9 +13,6 @@ jobs:
         with:
           python_version: ${{ matrix.python_version }}
           ref: v3.4.0
-          pypi_repository_url: ${{ secrets.PYPI_REPOSITORY_URL }}
-          pypi_username: ${{ secrets.PYPI_USERNAME }}
-          pypi_password: ${{ secrets.PYPI_PASSWORD }}
           AWS_ENDPOINT: ${{ secrets.AWS_ENDPOINT }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -44,6 +41,9 @@ jobs:
         uses: ./.github/actions/publish-wheels
         with:
           prefix: triton_pascal-3.4.0-
+          pypi_repository_url: ${{ secrets.PYPI_REPOSITORY_URL }}
+          pypi_username: ${{ secrets.PYPI_USERNAME }}
+          pypi_password: ${{ secrets.PYPI_PASSWORD }}
 
   # update-index:
   #   needs: publish

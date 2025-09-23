@@ -14,18 +14,6 @@ inputs:
     default: triton-lang/triton
     description: ""
 
-  pypi_repository_url:
-    required: false
-    description: ""
-
-  pypi_username:
-    required: false
-    description: ""
-
-  pypi_password:
-    required: false
-    description: ""
-
   AWS_ENDPOINT:
     description: aws endpoint
 
@@ -54,13 +42,3 @@ runs:
       with:
         name: triton_pascal-${{ inputs.python_version }}
         path: dist/*.whl
-
-    - name: Publish to private PyPI
-      if: ${{ inputs.pypi_repository_url != '' && inputs.pypi_username != '' && inputs.pypi_password != '' }}
-      shell: bash
-      run: |
-        pip install twine
-        twine upload --repository-url "${{ inputs.pypi_repository_url }}" \
-                     --username "${{ inputs.pypi_username }}" \
-                     --password "${{ inputs.pypi_password }}" \
-                     dist/*.whl
