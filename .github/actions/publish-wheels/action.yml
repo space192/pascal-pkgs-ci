@@ -48,4 +48,4 @@ runs:
         twine upload --repository-url "${{ inputs.pypi_repository_url }}" \
                      --username "${{ inputs.pypi_username }}" \
                      --password "${{ inputs.pypi_password }}" \
-                     ${{ inputs.prefix }}*.whl
+                     pascal-pkgs-ci/${{ inputs.prefix }}*.whl
