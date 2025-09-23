@@ -38,21 +38,16 @@ if (( 10#$major > 3 )) || \
 else
     path="$repository/$ref/python"
 fi
-curl -L -o sccache.tar.gz ${SCCACHE_DOWNLOAD_URL}
-tar -xzf sccache.tar.gz
-sudo mv sccache-v0.8.1-x86_64-unknown-linux-musl/sccache /usr/bin/sccache
-rm -rf sccache.tar.gz sccache-v0.8.1-x86_64-unknown-linux-musl
-export SCCACHE_BUCKET="triton-sccache"
-export SCCACHE_REGION="eu-west-1"
-export SSCACHE_ENDPOINT="$AWS_ENDPOINT"
-export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
-export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
-export SCCACHE_IDLE_TIMEOUT=0
-export TRITON_APPEND_CMAKE_ARGS="-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
 
-sccache --show-stats
+export CIBW_BEFORE_ALL_LINUX="curl -L -o sccache.tar.gz ${SCCACHE_DOWNLOAD_URL} &&\
+tar -xzf sccache.tar.gz &&\
+sudo mv sccache-v0.8.1-x86_64-unknown-linux-musl/sccache /usr/bin/sccache &&\
+rm -rf sccache.tar.gz sccache-v0.8.1-x86_64-unknown-linux-musl"
+export CIBW_ENVIRONMENT='SCCACHE_BUCKET="triton-sccache" SCCACHE_REGION="eu-west-1" SCCACHE_ENDPOINT="$AWS_ENDPOINT" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" SCCACHE_IDLE_TIMEOUT=0 TRITON_APPEND_CMAKE_ARGS="-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"'
+export CIBW_BEFORE_BUILD_LINUX="sccache --show-stats"
+
+
 "$root/venv/bin/cibuildwheel" --output-dir "$root/dist" "$path"
-sccache --show-stats
 
 # Repackage wheels
 export WHEEL_HOUSE="dist/*.whl"
