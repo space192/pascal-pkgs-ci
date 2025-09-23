@@ -39,14 +39,14 @@ jobs:
         with:
           prefix: triton_pascal-3.4.0-
 
-  update-index:
-    needs: publish
-    secrets: inherit
-    uses: ./.github/workflows/zz-update-index.yml
+  # update-index:
+  #   needs: publish
+  #   secrets: inherit
+  #   uses: ./.github/workflows/zz-update-index.yml
 
-    permissions:
-      id-token: write
-      pages: write
+  #   permissions:
+  #     id-token: write
+  #     pages: write
 
 on:
   workflow_dispatch:
