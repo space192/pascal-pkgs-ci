@@ -48,6 +48,7 @@ export SSCACHE_ENDPOINT="$AWS_ENDPOINT"
 export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
 export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
 export SCCACHE_IDLE_TIMEOUT=0
+export TRITON_APPEND_CMAKE_ARGS="-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache"
 
 sccache --show-stats
 "$root/venv/bin/cibuildwheel" --output-dir "$root/dist" "$path"
