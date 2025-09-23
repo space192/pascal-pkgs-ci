@@ -45,6 +45,8 @@ mv sccache-v0.8.1-x86_64-unknown-linux-musl/sccache /usr/bin/sccache &&\
 rm -rf sccache.tar.gz sccache-v0.8.1-x86_64-unknown-linux-musl"
 export CIBW_ENVIRONMENT="SCCACHE_BUCKET='triton-sccache' SCCACHE_REGION='eu-west-1' SCCACHE_ENDPOINT=${AWS_ENDPOINT} AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} SCCACHE_IDLE_TIMEOUT=0 TRITON_APPEND_CMAKE_ARGS='-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache'"
 export CIBW_BEFORE_BUILD_LINUX="sccache --show-stats"
+export CIBW_BEFORE_TEST_LINUX="sccache --show-stats"
+export CIBW_TEST_COMMAND="echo 'No tests'"
 
 
 "$root/venv/bin/cibuildwheel" --output-dir "$root/dist" "$path"
