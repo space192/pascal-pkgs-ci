@@ -5,6 +5,11 @@ root="$1"
 repository="$2"
 ref="$3"
 python_version="$4"
+AWS_ENDPOINT="$5"
+AWS_ACCESS_KEY_ID="$6"
+AWS_SECRET_ACCESS_KEY="$7"
+
+export SCCACHE_DOWNLOAD_URL=https://github.com/mozilla/sccache/releases/download/v0.8.1/sccache-v0.8.1-x86_64-unknown-linux-musl.tar.gz
 
 # Use root directory
 cd "$root"
@@ -33,8 +38,20 @@ if (( 10#$major > 3 )) || \
 else
     path="$repository/$ref/python"
 fi
+curl -L -o sccache.tar.gz ${SCCACHE_DOWNLOAD_URL}
+tar -xzf sccache.tar.gz
+sudo mv sccache-v0.8.1-x86_64-unknown-linux-musl/sccache /usr/bin/sccache
+rm -rf sccache.tar.gz sccache-v0.8.1-x86_64-unknown-linux-musl
+export SCCACHE_BUCKET="triton-sccache"
+export SCCACHE_REGION="eu-west-1"
+export SSCACHE_ENDPOINT="$AWS_ENDPOINT"
+export AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY"
+export SCCACHE_IDLE_TIMEOUT=0
 
+sccache --show-stats
 "$root/venv/bin/cibuildwheel" --output-dir "$root/dist" "$path"
+sccache --show-stats
 
 # Repackage wheels
 export WHEEL_HOUSE="dist/*.whl"

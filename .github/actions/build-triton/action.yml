@@ -1,17 +1,39 @@
 name: Build Triton wheels
+description: Builds Triton wheels for a given Python version and uploads them as an artifact.
 
 inputs:
   python_version:
     required: true
-    type: string
+    description: ""
 
   ref:
     default: main
-    type: string
+    description: ""
 
   repository:
     default: triton-lang/triton
-    type: string
+    description: ""
+
+  pypi_repository_url:
+    required: false
+    description: ""
+
+  pypi_username:
+    required: false
+    description: ""
+
+  pypi_password:
+    required: false
+    description: ""
+
+  AWS_ENDPOINT:
+    description: aws endpoint
+
+  AWS_ACCESS_KEY_ID:
+    description: aws acess key_id
+
+  AWS_SECRET_ACCESS_KEY:
+    description: aws acess key_secret
 
 runs:
   using: "composite"
@@ -19,7 +41,7 @@ runs:
   steps:
     - name: Build wheels
       shell: bash
-      run: .ci/build-triton.sh "$PWD" "${{ inputs.repository }}" "${{ inputs.ref }}" "${{ inputs.python_version }}"
+      run: .ci/build-triton.sh "$PWD" "${{ inputs.repository }}" "${{ inputs.ref }}" "${{ inputs.python_version }}" "${{ inputs.AWS_ENDPOINT }}" "${{ inputs.AWS_ACCESS_KEY_ID }}" "${{ inputs.AWS_SECRET_ACCESS_KEY }}"
 
     - name: Repackage wheels
       shell: bash
@@ -32,3 +54,13 @@ runs:
       with:
         name: triton_pascal-${{ inputs.python_version }}
         path: dist/*.whl
+
+    - name: Publish to private PyPI
+      if: ${{ inputs.pypi_repository_url != '' && inputs.pypi_username != '' && inputs.pypi_password != '' }}
+      shell: bash
+      run: |
+        pip install twine
+        twine upload --repository-url "${{ inputs.pypi_repository_url }}" \
+                     --username "${{ inputs.pypi_username }}" \
+                     --password "${{ inputs.pypi_password }}" \
+                     dist/*.whl
