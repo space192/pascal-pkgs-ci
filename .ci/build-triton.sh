@@ -22,7 +22,13 @@ cd "$root"
 export CIBW_BUILD="cp$python_version-manylinux_x86_64"
 export CIBW_BUILD_VERBOSITY="1"
 # Assuming you have the version in a variable called $version
-if [[ ${ref#v} >= "3.4.0" ]]; then
+version=${ref#v}  # Remove leading 'v'
+IFS='.' read -r major minor patch <<< "$version"
+
+# Compare version components numerically
+if (( 10#$major > 3 )) || \
+   (( 10#$major == 3 && 10#$minor > 4 )) || \
+   (( 10#$major == 3 && 10#$minor == 4 && 10#$patch >= 0 )); then
     path="$repository/$ref"
 else
     path="$repository/$ref/python"
