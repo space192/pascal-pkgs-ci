@@ -22,7 +22,7 @@ cd "$root"
 export CIBW_BUILD="cp$python_version-manylinux_x86_64"
 export CIBW_BUILD_VERBOSITY="1"
 # Assuming you have the version in a variable called $version
-if [[ "$version" >= "3.4.0" ]]; then
+if [[ ${ref#v} >= "3.4.0" ]]; then
     path="$repository/$ref"
 else
     path="$repository/$ref/python"
