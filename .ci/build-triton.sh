@@ -21,7 +21,14 @@ cd "$root"
 # Build wheels
 export CIBW_BUILD="cp$python_version-manylinux_x86_64"
 export CIBW_BUILD_VERBOSITY="1"
-"$root/venv/bin/cibuildwheel" --output-dir "$root/dist" "$repository/$ref/python"
+# Assuming you have the version in a variable called $version
+if [[ "$version" >= "3.4.0" ]]; then
+    path="$repository/$ref"
+else
+    path="$repository/$ref/python"
+fi
+
+"$root/venv/bin/cibuildwheel" --output-dir "$root/dist" "$path"
 
 # Repackage wheels
 export WHEEL_HOUSE="dist/*.whl"
