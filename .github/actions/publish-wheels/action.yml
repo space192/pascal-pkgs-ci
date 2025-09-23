@@ -45,8 +45,12 @@ runs:
       shell: bash
       run: |
         pip install twine packaging --upgrade
-        ls
+        ls triton_pascal-310
         twine upload --repository-url "${{ inputs.pypi_repository_url }}" \
                      --username "${{ inputs.pypi_username }}" \
                      --password "${{ inputs.pypi_password }}" \
-                     pascal-pkgs-ci/${{ inputs.prefix }}*.whl
+                     triton_pascal-39/${{ inputs.prefix }}*.whl \
+                     triton_pascal-310/${{ inputs.prefix }}*.whl \
+                     triton_pascal-311/${{ inputs.prefix }}*.whl \
+                     triton_pascal-312/${{ inputs.prefix }}*.whl \
+                     triton_pascal-313/${{ inputs.prefix }}*.whl
