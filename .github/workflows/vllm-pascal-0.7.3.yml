@@ -2,7 +2,7 @@ name: "[X] Build vLLM (v0.7.3)"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -16,7 +16,7 @@ jobs:
 
   publish:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     permissions:
       contents: write

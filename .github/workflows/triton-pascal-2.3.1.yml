@@ -2,7 +2,7 @@ name: "[X] Build Triton (v2.3.1)"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -26,7 +26,7 @@ jobs:
 
   publish:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     permissions:
       contents: write

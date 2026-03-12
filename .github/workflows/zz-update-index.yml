@@ -2,7 +2,7 @@ name: "[X] Update package index"
 
 jobs:
   cleanup:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Remove untagged images
@@ -44,7 +44,7 @@ jobs:
           - "vllm"
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Generate package index
@@ -127,7 +127,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     environment:
       name: github-pages
